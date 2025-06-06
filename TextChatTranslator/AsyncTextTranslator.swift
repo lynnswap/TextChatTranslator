@@ -6,11 +6,12 @@ actor AsyncTextTranslator {
     private var session: TranslationSession?
     private let service = TranslationService()
 
-    func configure(source: Locale.Language, target: Locale.Language) async throws {
-        let configuration = TranslationSession.Configuration(source: source, target: target)
-        session = try await TranslationSession(configuration: configuration)
+    /// Updates the translation session obtained from `translationTask` or elsewhere.
+    func update(session: TranslationSession?) {
+        self.session = session
     }
 
+    /// Asynchronously translates the given text.
     func translate(_ text: String) async -> String {
         do {
             return try await service.translate(session: session, text: text)
